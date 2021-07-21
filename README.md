@@ -44,3 +44,9 @@ Fields:
 - battery voltage (3.7V - max)
 - moisture (200 - min, 2000 - max)
 
+## TODO
+
+- configure deep sleep interval
+- blink on SOFT_RESET and WDT_RESET only
+
+

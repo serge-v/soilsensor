@@ -1,0 +1,2 @@
+rshell -p /dev/tty.usbserial-0238A511 cp main.py blink.py info.py wifi.py soilsensor.py config.py /pyboard/
+rshell -p /dev/tty.usbserial-0238A511 repl '~ import main ~ quit()'

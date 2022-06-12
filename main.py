@@ -1,10 +1,15 @@
+import config
+
 import machine
 import time
 import esp32
-import tinypico as TinyPICO
 from machine import RTC, WDT
-
 from micropython import const
+
+if config.Board == "tinys2":
+    import tinys2 as tiny
+else:
+    import tinypico as tiny
 
 import blink, wifi, soilsensor
 
@@ -38,14 +43,16 @@ time.sleep(2)
 
 rtc = RTC()
 ts = rtc.datetime()
-volts = TinyPICO.get_battery_voltage()
+volts = tiny.get_battery_voltage()
 
 msg = '{:04}-{:02}-{:02}+{:02}:{:02}:{:02}'.format(ts[0], ts[1], ts[2], ts[4], ts[5], ts[6])
-msg += "+reset:{}+t:{}F+hall:{}".format(reset, esp32.raw_temperature(), esp32.hall_sensor())
+#msg += "+reset:{}+t:{}F+hall:{}".format(reset, esp32.raw_temperature(), esp32.hall_sensor())
+msg += "+reset:{}".format(reset)
 msg += "+batv:{:.2f}V".format(volts)
 msg += "+moisture:{}".format(moisture)
-
+msg += "+name:{}".format(config.Name)
+print(dir(esp32))
 print("sending:", msg)
 wifi.send_msg(msg)
 
-TinyPICO.go_deepsleep(60000)
+tiny.go_deepsleep(3570*1000)

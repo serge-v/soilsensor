@@ -1,9 +1,14 @@
+import config
 import network, time
 import usocket as socket
 import ussl as ssl
-import tinypico as TinyPICO
 
-import blink, config
+if config.Board == "tinys2":
+    import tinys2 as tiny
+else:
+    import tinypico as tiny
+
+import blink
 
 def send_msg_raw(msg):
     blink.blink(1, blink.BLUE)
@@ -13,7 +18,7 @@ def send_msg_raw(msg):
     s.connect(addr)
     s = ssl.wrap_socket(s, server_hostname=config.Host)
     
-    req = b'GET /log/?m=' + msg + ' HTTP/1.1\r\nHost: ' + config.Host + '\r\n\r\n'
+    req = b'GET /log/?m=' + msg + '&f=' + config.Name + ' HTTP/1.1\r\nHost: ' + config.Host + '\r\n\r\n'
     s.write(req)
 
     data = s.read(12)
@@ -54,4 +59,4 @@ def connect():
         attempts -= 1
     blink.blink(5, blink.RED)
     print("go sleep after 3 attempts")
-    TinyPICO.go_deepsleep(60000)
+    tiny.go_deepsleep(60000)

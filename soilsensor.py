@@ -1,6 +1,12 @@
+import config
 import time
 from machine import SoftI2C, Pin
-import tinypico as TinyPICO
+
+if config.Board == "tinys2":
+    import tinys2 as tiny
+else:
+    import tinypico as tiny
+
 import ustruct as struct
 
 TOUCH_BASE = const(0x0F)
@@ -11,7 +17,7 @@ STATUS_HW_ID = const(0x01)
 addr = const(0x36)
 
 def get_moisture_internal():
-    i2c = SoftI2C( scl=Pin(TinyPICO.I2C_SCL), sda=Pin(TinyPICO.I2C_SDA) )
+    i2c = SoftI2C( scl=Pin(tiny.I2C_SCL), sda=Pin(tiny.I2C_SDA) )
     print(i2c.scan())
 
     # reset sensor

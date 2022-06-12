@@ -1,7 +1,14 @@
+import config
+
+if config.Board == "tinys2":
+    import tinys2 as TinyS2
+    from neopixel import NeoPixel
+else:
+    import tinypico as TinyPICO
+    from dotstar import DotStar
+
 import time
-import tinypico as TinyPICO
 from machine import SoftSPI, Pin, RTC
-from dotstar import DotStar
 
 RED = (128, 0, 0, 0.2)
 GREEN = (0, 128, 0, 0.2)
@@ -9,18 +16,33 @@ BLUE = (0, 0, 128, 0.2)
 YELLOW = (128, 128, 0, 0.2)
 MAGENTA = (128, 0, 128, 0.2)
 
-dotstar = None
+blinker = None
 
-def init():
-    global dotstar
+def initDotstar():
+    global blinker
     spi = SoftSPI(sck=Pin( TinyPICO.DOTSTAR_CLK ), mosi=Pin( TinyPICO.DOTSTAR_DATA ), miso=Pin( TinyPICO.SPI_MISO) ) 
-    dotstar = DotStar(spi, 1, brightness = 0.5 )
+    blinker = DotStar(spi, 1, brightness = 0.5 )
     TinyPICO.set_dotstar_power(True)
 
+def initNeopixel():
+    global blinker
+    blinker = NeoPixel(Pin(TinyS2.RGB_DATA), 1)
+    TinyS2.set_pixel_power(True)
+
+def init():
+    if config.Board == "tinys2":
+        initNeopixel()
+    else:
+        initDotstar()
+    
 def blink(n, color):
     for i in range(n):
-        dotstar[0] = color
+        blinker[0] = color
+        if config.Board == "tinys2":
+            blinker.write()
         time.sleep_ms(200)
-        dotstar[0] = (0, 0, 0, 0)
+        blinker[0] = (0, 0, 0, 0)
+        if config.Board == "tinys2":
+            blinker.write()
         time.sleep_ms(200)
     time.sleep_ms(300)

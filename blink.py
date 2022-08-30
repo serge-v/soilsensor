@@ -1,7 +1,10 @@
 import config
 
 if config.Board == "tinys2":
-    import tinys2 as TinyS2
+    import tinys2 as tiny
+    from neopixel import NeoPixel
+elif config.Board == "tinys3":
+    import tinys3 as tiny
     from neopixel import NeoPixel
 else:
     import tinypico as TinyPICO
@@ -26,11 +29,11 @@ def initDotstar():
 
 def initNeopixel():
     global blinker
-    blinker = NeoPixel(Pin(TinyS2.RGB_DATA), 1)
-    TinyS2.set_pixel_power(True)
+    blinker = NeoPixel(Pin(tiny.RGB_DATA), 1)
+    tiny.set_pixel_power(True)
 
 def init():
-    if config.Board == "tinys2":
+    if config.Board == "tinys2" or config.Board == "tinys3":
         initNeopixel()
     else:
         initDotstar()
@@ -38,11 +41,11 @@ def init():
 def blink(n, color):
     for i in range(n):
         blinker[0] = color
-        if config.Board == "tinys2":
+        if config.Board == "tinys2" or config.Board == "tinys3":
             blinker.write()
         time.sleep_ms(200)
         blinker[0] = (0, 0, 0, 0)
-        if config.Board == "tinys2":
+        if config.Board == "tinys2" or config.Board == "tinys3":
             blinker.write()
         time.sleep_ms(200)
     time.sleep_ms(300)

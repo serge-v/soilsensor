@@ -5,6 +5,8 @@ import ussl as ssl
 
 if config.Board == "tinys2":
     import tinys2 as tiny
+elif config.Board == "tinys3":
+    import tinys3 as tiny
 else:
     import tinypico as tiny
 
@@ -17,7 +19,7 @@ def send_msg_raw(msg):
     s = socket.socket()
     s.connect(addr)
     s = ssl.wrap_socket(s, server_hostname=config.Host)
-    
+
     req = b'GET /log/?m=' + msg + '&f=' + config.Name + ' HTTP/1.1\r\nHost: ' + config.Host + '\r\n\r\n'
     s.write(req)
 

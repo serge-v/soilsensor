@@ -4,6 +4,8 @@ from machine import SoftI2C, Pin
 
 if config.Board == "tinys2":
     import tinys2 as tiny
+elif config.Board == "tinys3":
+    import tinys3 as tiny
 else:
     import tinypico as tiny
 

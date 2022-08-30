@@ -8,6 +8,8 @@ from micropython import const
 
 if config.Board == "tinys2":
     import tinys2 as tiny
+elif config.Board == "tinys3":
+    import tinys3 as tiny
 else:
     import tinypico as tiny
 
@@ -55,4 +57,4 @@ print(dir(esp32))
 print("sending:", msg)
 wifi.send_msg(msg)
 
-tiny.go_deepsleep(3570*1000)
+tiny.go_deepsleep(60*1000)
